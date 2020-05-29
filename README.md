@@ -14,6 +14,8 @@ see [Boids](https://en.wikipedia.org/wiki/Boids) for explanation of what boids a
 ### Notes:
 * When starting the repo from Unity, the project is at the root of the repo.  (Not sure I like this.  Not sure how to change this either.)
 
+Deleted the project and then changed the way I created the repo.  Follow the directions in [TerminalGit.md](TerminalGit.md).
+
 ## Folder structure
 (I like the structure from a Unity tutorial)
 * Assets
