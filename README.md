@@ -13,3 +13,22 @@ see [Boids](https://en.wikipedia.org/wiki/Boids) for explanation of what boids a
 
 ### Notes:
 * When starting the repo from Unity, the project is at the root of the repo.  (Not sure I like this.  Not sure how to change this either.)
+
+## Folder structure
+(I like the structure from a Unity tutorial)
+* Assets
+  * Art
+    * Animation
+      * (Animation Clips)
+    * Sprites
+      * Characters
+      * Environment
+        * Materials
+      * UI
+      * VFX
+    * Tile
+  * Audio
+  * Demo
+  * Plugins
+  * PreFabs
+  * Scripts
