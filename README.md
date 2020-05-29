@@ -1,5 +1,4 @@
 # BoidsSimulation
-Boids Simulation
 
 Simulation of Boids
 
@@ -7,7 +6,7 @@ Simulation of Boids
 
 see [Boids](https://en.wikipedia.org/wiki/Boids) for explanation of what boids are.
 
-Goals:
+### Goals:
 * Successful use of GitHub and Unity
 * Successful Boids simulation
 * HUD with ability to put in obstacles
