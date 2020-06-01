@@ -4,12 +4,12 @@ It seems that using Terminal and the command line Git is the way to go when maki
 
 Here is what I came up with in terms of process.
 1. Make the repo folder wherever you like to make your projects using either Finder or Terminal.  (I decided that I wanted to put the folder in the UnityProjects folder.  But I wanted to make sure the project was a folder deeper.)
-1. You can go ahead and add the readme.md, license, .gitattributes, and .gitignore files if you like.  (Probably a good thing to do.)  You can use the sample .gitattributes and .gitignore files from [thoughtbot](https://thoughtbot.com/blog/how-to-git-with-unity).  Another good source for [.gitignore](https://www.gitignore.io).
+1. You can go ahead and add the readme.md, license, .gitattributes, and .gitignore files if you like.  (Probably a good thing to do.)  You can use the sample .gitattributes and .gitignore files from [thoughtbot](https://thoughtbot.com/blog/how-to-git-with-unity).  Another good source for creating [.gitignore](https://www.gitignore.io) is the link (which is `https://www.gitignore.io`).
 1. Using Terminal:
    1. Navigate to the repo folder.  cd foldername
    1. git init
    1. git remote add origin `https://github.com/UserName/repo.git` (https) or
-   1. ~~git remote add origin `git@github.com:UserName/repo.git` (SSH)~~  (You can use it, but I wanted to avoid confusion.  Only use https or SSH.)
+   1. ~~git remote add origin `git@github.com:UserName/repo.git` (SSH)~~  (You can use it, but I wanted to avoid confusion.  Note: You can only use one or the other, https or SSH.)
    1. git pull repo.git (use the full url including https://)
 1. Create the Unity project in your repo folder.  This will create a new folder instead of making the project right at the front of your repo.
 1. Using Terminal:
