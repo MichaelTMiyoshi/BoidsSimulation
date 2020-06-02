@@ -9,6 +9,12 @@ public class Boid : MonoBehaviour
     public float speed { get { return velocity.magnitude; } }
 
     Rigidbody2D rigidbody2d;
+
+    // for boundaries (could not make it work with two scripts
+    //private Vector2 screenBounds;
+    //private float objectWidth;
+    //private float objectHeight;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,12 +25,19 @@ public class Boid : MonoBehaviour
         float x= 0.0f, y = 0.0f;
         while (x == 0.0f && y == 0.0f)
         {
-            x = Random.Range(-3.0f, 3.0f);
-            y = Random.Range(-3.0f, 3.0f);
+            x = Random.Range(-3.0f, 3.0f);  // thought to randomize speed
+            y = Random.Range(-3.0f, 3.0f);  // normalizing (below) just randomizes direction
         }
         velocity = new Vector2(x, y);
         velocity.Normalize();
-        velocity *= 3.0f;
+        //velocity *= 3.0f;
+        velocity *= Random.Range(0.0f, 5.0f);   // give the speed a randomness too
+
+        // for boundaries (could not make it work with two scripts
+        //screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
+        //objectWidth = transform.GetComponent<SpriteRenderer>().bounds.size.x / 2;
+        //objectHeight = transform.GetComponent<SpriteRenderer>().bounds.size.y / 2;
+        //Debug.Log("Width, Height: (" + objectWidth + ", " + objectHeight + ")");
     }
 
     // Update is called once per frame
@@ -60,4 +73,13 @@ public class Boid : MonoBehaviour
         rigidbody2d.MovePosition(position);
         rigidbody2d.MoveRotation(degrees);
     }
+
+/*    void LateUpdate()
+    {
+        Vector3 viewPos = transform.position;
+        viewPos.x = Mathf.Clamp(viewPos.x, screenBounds.x + objectWidth, screenBounds.x * (-1) - (5.0f) * objectWidth);
+        viewPos.y = Mathf.Clamp(viewPos.y, screenBounds.y + objectHeight, screenBounds.y * (-1) - (5.0f) * objectHeight);
+        transform.position = viewPos;
+        Debug.Log("viewPos.x, y : (" + viewPos.x + ", " + viewPos.y + ")");
+    }*/
 }
