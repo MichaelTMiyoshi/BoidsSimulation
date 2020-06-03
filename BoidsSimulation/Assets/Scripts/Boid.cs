@@ -7,6 +7,7 @@ public class Boid : MonoBehaviour
     public Vector2 position;
     public Vector2 velocity;
     public float speed { get { return velocity.magnitude; } }
+    public Vector2 vel {  get { return velocity; } set { velocity = value; } }
 
     Rigidbody2D rigidbody2d;
 
@@ -74,12 +75,8 @@ public class Boid : MonoBehaviour
         rigidbody2d.MoveRotation(degrees);
     }
 
-/*    void LateUpdate()
+/*    public void ChangeVelocity(Vector2 vel)
     {
-        Vector3 viewPos = transform.position;
-        viewPos.x = Mathf.Clamp(viewPos.x, screenBounds.x + objectWidth, screenBounds.x * (-1) - (5.0f) * objectWidth);
-        viewPos.y = Mathf.Clamp(viewPos.y, screenBounds.y + objectHeight, screenBounds.y * (-1) - (5.0f) * objectHeight);
-        transform.position = viewPos;
-        Debug.Log("viewPos.x, y : (" + viewPos.x + ", " + viewPos.y + ")");
+        velocity = vel;
     }*/
 }
