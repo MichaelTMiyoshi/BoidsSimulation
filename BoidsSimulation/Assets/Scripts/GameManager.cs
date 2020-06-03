@@ -17,6 +17,10 @@
  *      not where the default value in the class tells it.  Which is why I
  *      get the screen bounds here and instantiate the boids with random
  *      locations on the screen.
+ *      
+ *      Just a note on GitHub (branches):
+ *      
+ *      https://www.datree.io/resources/git-create-branch
  */
 
 using System.Collections;

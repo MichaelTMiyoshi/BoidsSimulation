@@ -1,4 +1,61 @@
-﻿using System.Collections;
+﻿/****************************************************************************
+ * Boids:
+ *      https://en.wikipedia.org/wiki/Boids
+ *      
+ *      Boids is an artificial life program, developed by Craig Reynolds 
+ *      in 1986, which simulates the flocking behaviour of birds. His paper 
+ *      on this topic was published in 1987 in the proceedings of the ACM 
+ *      SIGGRAPH conference. [1] The name "boid" corresponds to a shortened 
+ *      version of "bird-oid object", which refers to a bird-like object.[2] 
+ *      Incidentally, "boid" is also a New York Metropolitan dialect 
+ *      pronunciation for "bird".
+ *      
+ *      Rules applied in simple Boids
+ *          Separation
+ *          Alignment
+ *          Cohesion
+ *      
+ *      As with most artificial life simulations, Boids is an example of 
+ *      emergent behavior; that is, the complexity of Boids arises from the i
+ *      nteraction of individual agents (the boids, in this case) adhering to 
+ *      a set of simple rules. The rules applied in the simplest Boids world 
+ *      are as follows:
+ *      
+ *          separation: steer to avoid crowding local flockmates
+ *          alignment: steer towards the average heading of local flockmates
+ *          cohesion: steer to move towards the average position 
+ *              (center of mass) of local flockmates
+ *          
+ *      More complex rules can be added, such as obstacle avoidance and 
+ *      goal seeking.
+ *      
+ **************************************************************************** 
+ *
+ *      To do:
+ *          Add Area of influence.  This will be a collision circle outside the
+ *          boid where any other boid inside this box will be used to calculate
+ *          influence, separation, and cohesion.  Might need separate colliders
+ *          for each of them or might just need one.
+ *          
+ *          For separation:
+ *              Determine a minimum distance a boid needs to be from its
+ *              neighbor and adjust speed accordingly.  (Speed up or slow down
+ *              or change direction to be average distance between others in
+ *              the cirlce of influence.
+ *          
+ *          For Alignment:
+ *              Determine the average direction of the boids in the area of
+ *              influence.
+ *          
+ *          For Cohesion:
+ *              Determine the average position of boids in the area of 
+ *              influence.
+ *
+ *          In the end, each of the three will produce some change to the 
+ *          direction and speed of the boid.
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,10 +68,7 @@ public class Boid : MonoBehaviour
 
     Rigidbody2D rigidbody2d;
 
-    // for boundaries (could not make it work with two scripts
-    //private Vector2 screenBounds;
-    //private float objectWidth;
-    //private float objectHeight;
+    List<GameObject> influencers;
 
     // Start is called before the first frame update
     void Start()
@@ -33,12 +87,7 @@ public class Boid : MonoBehaviour
         velocity.Normalize();
         //velocity *= 3.0f;
         velocity *= Random.Range(0.0f, 5.0f);   // give the speed a randomness too
-
-        // for boundaries (could not make it work with two scripts
-        //screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
-        //objectWidth = transform.GetComponent<SpriteRenderer>().bounds.size.x / 2;
-        //objectHeight = transform.GetComponent<SpriteRenderer>().bounds.size.y / 2;
-        //Debug.Log("Width, Height: (" + objectWidth + ", " + objectHeight + ")");
+        influencers = new List<GameObject>();
     }
 
     // Update is called once per frame
@@ -75,8 +124,15 @@ public class Boid : MonoBehaviour
         rigidbody2d.MoveRotation(degrees);
     }
 
-/*    public void ChangeVelocity(Vector2 vel)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        velocity = vel;
-    }*/
+        if (collision != null) { influencers.Add(collision.gameObject); }
+        if (influencers.Count != 0) { Debug.Log("influencer size (added): " + influencers.Count); }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision != null) { influencers.Remove(collision.gameObject); }
+        if (influencers.Count != 0) { Debug.Log("influencer size (remove): " + influencers.Count); }
+    }
 }
