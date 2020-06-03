@@ -18,7 +18,19 @@ Here is what I came up with in terms of process.
    1. git status (optional in case you want to see what files will be included in the commit)
    1. git commit -m "Commit message"
    1. git push origin master
-   
+
+You might also need to pull the project from the GitHub repo before pushing.  This can happen when you change files on GitHub rather than in the local repo on your computer (like editing a readme.md or other .md file or any online file for that matter).  You just need to pull the repo before pushing.  If you already know you need to pull first, you can just pull it at the top of your process.
+
+1. Using Terminal:
+   1. git pull `https://github.com/UserName/repo.git` master
+   1. git status (to see what files need to be included in the commit)
+   1. git add . (adds all the files with changes)
+   1. git status (optional in case you want to see what files will be included in the commit)
+   1. git commit -m "Commit message"
+   1. git push origin master
+   1. (or you might need to pull here after getting an error message) git pull `https://github.com/UserName/repo.git` master
+   1. git push origin master
+
 The process is pretty simple once you do it.  I used SSH first, but then figured out I needed to create an SSH key.  So I had to change the type of remote I was using.  I found a nice article to help me get the [remote change](https://help.github.jp/enterprise/2.11/user/articles/changing-a-remote-s-url/) done.
 
 Using terminal:
