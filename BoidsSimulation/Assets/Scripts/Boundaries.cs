@@ -52,14 +52,22 @@ using UnityEngine;
  *              bouncing or wrapping.  Still might need to up it for wrap.
  *              Gets caught on the edge every once in a while.  (Top is most
  *              noticable.)
+ *              
+ *      06/04/2020
+ *          To do:
+ *              There is an interesting boundary condition.  The boids go from
+ *              side to side or top to bottom, oscillating between the two.
+ *              Figured out it is a boundary condition.  Thought I had the
+ *              answer, but not quite.  Will set up individual conditions for 
+ *              each of the four boundaries.
  */
 public class Boundaries : MonoBehaviour
 {
     private Vector2 screenBounds;
     private float objectWidth;
     private float objectHeight;
-    public bool wrap;
-    public float fudgeFactor = 2.0f;
+    bool wrap;
+    float fudgeFactor;
 
     // Start is called before the first frame update
     void Start()
@@ -76,6 +84,8 @@ public class Boundaries : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
+        wrap = GameManager.instance.wrap;
+        fudgeFactor = GameManager.instance.boundaryFudgeFactor;
         Vector3 viewPos = transform.position;
         //Vector3 viewPos = GetComponent<Rigidbody2D>().position;
         //viewPos.x = Mathf.Clamp(viewPos.x, screenBounds.x * (-1) + objectWidth, screenBounds.x - objectWidth);
@@ -88,7 +98,11 @@ public class Boundaries : MonoBehaviour
         Vector2 vel = boid.vel;
         if (viewPos.x <= -xMax || xMax <= viewPos.x)
         {
-            if(wrap) { viewPos.x = -1 * viewPos.x; }
+            float xPos = viewPos.x;
+            if(viewPos.x < 0) { xPos = xPos + objectWidth; }
+            else { xPos = -objectWidth; }
+
+            if(wrap) { viewPos.x = -1 * xPos; }
             else
             {
                 //boid.velocity.x = -1 * boid.velocity.x;
@@ -98,7 +112,11 @@ public class Boundaries : MonoBehaviour
         }
         if (viewPos.y <= -yMax || yMax <= viewPos.y)
         {
-            if (wrap) { viewPos.y = -1 * viewPos.y; }
+            float yPos = viewPos.y;
+            if(viewPos.y < 0) { yPos = yPos + objectHeight; }
+            else { yPos = yPos - objectHeight; }
+
+            if (wrap) { viewPos.y = -1 * yPos; }
             else
             {
                 //boid.velocity.y = -1 * boid.velocity.y;

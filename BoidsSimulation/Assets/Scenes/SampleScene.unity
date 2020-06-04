@@ -309,9 +309,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BoidPrefab: {fileID: 867229179506805556, guid: 910ed64f15a4d4f3f870e6011270c487,
     type: 3}
-  instances: 10
-  flocking: 1
+  instances: 100
   wrap: 0
+  flocking: 1
+  separation: 0
+  alignment: 0
+  cohesion: 0
+  influenceRadius: 10
+  separationFactor: 0
+  alignmentFactor: 0
+  cohesionFactor: 0
+  boundaryFudgeFactor: 0
 --- !u!4 &1669108133
 Transform:
   m_ObjectHideFlags: 0

@@ -68,6 +68,7 @@ public class Boid : MonoBehaviour
     public Vector2 vel {  get { return velocity; } set { velocity = value; } }
 
     Rigidbody2D rigidbody2d;
+    CircleCollider2D circlecollider2d;
     // Does instantiating it here really make a difference (not in Start())
     List<GameObject> influencers = new List<GameObject>();
 
@@ -89,22 +90,28 @@ public class Boid : MonoBehaviour
         //velocity *= 3.0f;
         velocity *= Random.Range(0.0f, 5.0f);   // give the speed a randomness too
         //influencers = new List<GameObject>();
+        circlecollider2d = GetComponent<CircleCollider2D>();
+        circlecollider2d.radius = GameManager.instance.influenceRadius;
     }
 
     // Update is called once per frame
     void Update()
     {
         position = rigidbody2d.position;
-
+        circlecollider2d.radius = GameManager.instance.influenceRadius;
         // Calculate position and velocity first without any influence of the
         // flock.  Then, modify the velocity to take into account the flock
         // influences.  Check to see that flocking is enabled.
         Vector2 positionDifference =  new Vector2(0.0f, 0.0f);     // cohesion
-        float positionFactor = 0.5f;
+        float separationFactor = GameManager.instance.separationFactor;
+        float alignmentFactor = GameManager.instance.alignmentFactor;
+        float cohesionFactor = GameManager.instance.cohesionFactor;
         //Vector2 velocityDifference;     // alignment
         //Vector2 separationDifference;   // separation
         Vector2 velocityChange = new Vector2(0.0f, 0.0f);
         float currentSpeed = speed;
+        Vector2 direction = GetDirection();
+        Vector2 directionWeighted = vel;
         if (GameManager.instance.flocking)
         {
             Vector2 averagePosition = new Vector2(0.0f, 0.0f);
@@ -113,20 +120,36 @@ public class Boid : MonoBehaviour
                 //Debug.Log(influencers);
                 for (int i = 0; i < influencers.Count; i++)
                 {
-                    Rigidbody2D other = influencers[i].GetComponent<Rigidbody2D>();
-                    averagePosition.x += other.transform.position.x;
-                    averagePosition.y += other.transform.position.y;
-                    currentSpeed += influencers[i].GetComponent<Boid>().speed;
+                    if (GameManager.instance.cohesion)
+                    {
+                        Rigidbody2D other = influencers[i].GetComponent<Rigidbody2D>();
+                        averagePosition.x += other.transform.position.x;
+                        averagePosition.y += other.transform.position.y;
+                    }
+                    if (GameManager.instance.alignment)
+                    {
+                        directionWeighted += influencers[i].GetComponent<Boid>().vel;   // weights speed
+                        //direction += influencers[i].GetComponent<Boid>().GetDirection();    // does not give any weight to speed
+                    }
+
                 }
-                currentSpeed /= (influencers.Count + 1);
+                if (GameManager.instance.alignment)
+                {
+                    directionWeighted /= (influencers.Count + 1);
+                    directionWeighted.Normalize();
+                    velocity = directionWeighted * currentSpeed;
+                    //direction /= (influencers.Count + 1);
+                    //direction.Normalize();
+                    //velocity = direction * currentSpeed;
+                }
             }
             //else { Debug.Log("Influencers empty"); }
-            if (averagePosition != new Vector2(0.0f, 0.0f))
+            if (averagePosition != new Vector2(0.0f, 0.0f)  && GameManager.instance.cohesion)
             {
                 positionDifference =  averagePosition- position;    // direction of speed change to get cohesion
 
                 positionDifference.Normalize();
-                Vector2 positionDifferenceInfluence = positionDifference * positionFactor;
+                Vector2 positionDifferenceInfluence = positionDifference * cohesionFactor;
                 //Debug.Log("PosDiff: " + positionDifferenceInfluence);
                 velocityChange = velocity + positionDifferenceInfluence;
             }
@@ -168,6 +191,13 @@ public class Boid : MonoBehaviour
         //Debug.Log("Position: (" + position.x + ", " + position.y + ")");  // forgot to add Rigidbody2D to PreFab
         rigidbody2d.MovePosition(position);
         rigidbody2d.MoveRotation(degrees);
+    }
+
+    public Vector2 GetDirection()
+    {
+        Vector2 direction = velocity;
+        direction.Normalize();
+        return direction;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

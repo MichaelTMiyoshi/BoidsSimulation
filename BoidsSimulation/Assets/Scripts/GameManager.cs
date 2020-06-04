@@ -21,6 +21,13 @@
  *      Just a note on GitHub (branches):
  *      
  *      https://www.datree.io/resources/git-create-branch
+ *      
+ *      06/04/2020
+ *          Made quite a few global variables.  These help to fine tune
+ *          the game.  Or at least they are supposed to.  Discovered that 
+ *          in order to make the globals do anything, the local variables
+ *          that get them must be in the Update() method.  Awake() and Start()
+ *          only happen once each.  (Awake() can happen more, but not Start().)
  */
 
 using System.Collections;
@@ -35,23 +42,44 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
     // Put other public variables and constants here.
     public GameObject BoidPrefab;
-    public int instances = 1;
+    public int instances = 1;   // if initialized in Awake, cannot change in Unity interface
     Vector2 screenBounds;
 
-    public bool flocking;
+    // screen wrap (show up on the other side) or bounce
     public bool wrap;
 
+    public bool flocking;
+    // subset of flocking
+    public bool separation;
+    public bool alignment;
+    public bool cohesion;
+    public float influenceRadius;
+    public float separationFactor;
+    public float alignmentFactor;
+    public float cohesionFactor;
+    public float boundaryFudgeFactor;
+    
+
+    // Called before start
     private void Awake()
     {
         if(instance == null) { instance = this; }   // This should be only GameManager
         else if(instance != this) { Destroy(gameObject); }  // only have one GameManager
+
+        wrap = true;
+        flocking = true;
+        separation = true;
+        alignment = true;
+        cohesion = true;
+        influenceRadius = 0.5f;
+        separationFactor = 1.0f;
+        alignmentFactor = 1.0f;
+        cohesionFactor = 0.5f;
+        boundaryFudgeFactor = 1.0f; //2.0f;
     }
     // Start is called before the first frame update
     void Start()
     {
-        flocking = true;
-        wrap = true;
-
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
         float xMax = screenBounds.x;
         float yMax = screenBounds.y;
