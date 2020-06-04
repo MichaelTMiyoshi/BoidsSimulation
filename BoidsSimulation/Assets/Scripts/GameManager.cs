@@ -38,6 +38,9 @@ public class GameManager : MonoBehaviour
     public int instances = 1;
     Vector2 screenBounds;
 
+    public bool flocking;
+    public bool wrap;
+
     private void Awake()
     {
         if(instance == null) { instance = this; }   // This should be only GameManager
@@ -46,6 +49,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        flocking = true;
+        wrap = true;
+
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
         float xMax = screenBounds.x;
         float yMax = screenBounds.y;

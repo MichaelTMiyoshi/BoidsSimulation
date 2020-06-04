@@ -64,11 +64,12 @@ public class Boid : MonoBehaviour
     public Vector2 position;
     public Vector2 velocity;
     public float speed { get { return velocity.magnitude; } }
+    // setter of vel not private because it is used by Boundaries.cs
     public Vector2 vel {  get { return velocity; } set { velocity = value; } }
 
     Rigidbody2D rigidbody2d;
-
-    List<GameObject> influencers;
+    // Does instantiating it here really make a difference (not in Start())
+    List<GameObject> influencers = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -87,15 +88,58 @@ public class Boid : MonoBehaviour
         velocity.Normalize();
         //velocity *= 3.0f;
         velocity *= Random.Range(0.0f, 5.0f);   // give the speed a randomness too
-        influencers = new List<GameObject>();
+        //influencers = new List<GameObject>();
     }
 
     // Update is called once per frame
     void Update()
     {
         position = rigidbody2d.position;
+
+        // Calculate position and velocity first without any influence of the
+        // flock.  Then, modify the velocity to take into account the flock
+        // influences.  Check to see that flocking is enabled.
+        Vector2 positionDifference =  new Vector2(0.0f, 0.0f);     // cohesion
+        float positionFactor = 0.5f;
+        //Vector2 velocityDifference;     // alignment
+        //Vector2 separationDifference;   // separation
+        Vector2 velocityChange = new Vector2(0.0f, 0.0f);
+        float currentSpeed = speed;
+        if (GameManager.instance.flocking)
+        {
+            Vector2 averagePosition = new Vector2(0.0f, 0.0f);
+            if (influencers.Count != 0)
+            {
+                //Debug.Log(influencers);
+                for (int i = 0; i < influencers.Count; i++)
+                {
+                    Rigidbody2D other = influencers[i].GetComponent<Rigidbody2D>();
+                    averagePosition.x += other.transform.position.x;
+                    averagePosition.y += other.transform.position.y;
+                }
+            }
+            //else { Debug.Log("Influencers empty"); }
+            if (averagePosition != new Vector2(0.0f, 0.0f))
+            {
+                positionDifference =  averagePosition- position;    // direction of speed change to get cohesion
+
+                positionDifference.Normalize();
+                Vector2 positionDifferenceInfluence = positionDifference * positionFactor;
+                //Debug.Log("PosDiff: " + positionDifferenceInfluence);
+                velocityChange = velocity + positionDifferenceInfluence;
+            }
+            velocity += velocityChange;
+            // for debugging to see why the velocity changes so greatly
+            velocity.Normalize();
+            velocity *= currentSpeed;   // just to see if the velocity is changing direction
+        }
+
+        // Angle boid pointing and location of boid need to be calculated after
+        // new velocity is calculated, whether flocking or not.
+
         float degrees;
-        if(velocity.x != 0)
+        // tan of 90 and 270 degrees not defined; avoid div by 0
+        if (velocity.x != 0)
         {
             float radians = Mathf.Atan2(velocity.y, velocity.x);
             degrees = Mathf.Rad2Deg * radians;
@@ -126,13 +170,13 @@ public class Boid : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision != null) { influencers.Add(collision.gameObject); }
-        if (influencers.Count != 0) { Debug.Log("influencer size (added): " + influencers.Count); }
+        if (collision != null && !influencers.Contains(collision.gameObject)) { influencers.Add(collision.gameObject); }
+        //if (influencers.Count != 0) { Debug.Log("influencer size (added): " + influencers.Count); }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision != null) { influencers.Remove(collision.gameObject); }
-        if (influencers.Count != 0) { Debug.Log("influencer size (remove): " + influencers.Count); }
+        if (collision != null && influencers.Contains(collision.gameObject)) { influencers.Remove(collision.gameObject); }
+        //if (influencers.Count != 0) { Debug.Log("influencer size (remove): " + influencers.Count); }
     }
 }

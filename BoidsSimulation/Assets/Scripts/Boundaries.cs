@@ -70,7 +70,7 @@ public class Boundaries : MonoBehaviour
         objectHeight = transform.GetComponent<SpriteRenderer>().bounds.size.y / 2;
         //Debug.Log("ScreenBounds: (" + Screen.width + ", " + Screen.height + ")");
         //Debug.Log("Width, Height: (" + objectWidth + ", " + objectHeight + ")");
-        wrap = true;
+        wrap = GameManager.instance.wrap;
     }
 
     // Update is called once per frame
