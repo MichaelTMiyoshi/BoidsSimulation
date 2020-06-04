@@ -116,7 +116,9 @@ public class Boid : MonoBehaviour
                     Rigidbody2D other = influencers[i].GetComponent<Rigidbody2D>();
                     averagePosition.x += other.transform.position.x;
                     averagePosition.y += other.transform.position.y;
+                    currentSpeed += influencers[i].GetComponent<Boid>().speed;
                 }
+                currentSpeed /= (influencers.Count + 1);
             }
             //else { Debug.Log("Influencers empty"); }
             if (averagePosition != new Vector2(0.0f, 0.0f))

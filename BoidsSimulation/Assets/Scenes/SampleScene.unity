@@ -310,6 +310,8 @@ MonoBehaviour:
   BoidPrefab: {fileID: 867229179506805556, guid: 910ed64f15a4d4f3f870e6011270c487,
     type: 3}
   instances: 10
+  flocking: 1
+  wrap: 0
 --- !u!4 &1669108133
 Transform:
   m_ObjectHideFlags: 0
