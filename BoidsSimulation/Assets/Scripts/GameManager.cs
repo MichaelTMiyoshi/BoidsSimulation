@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
     public float alignmentFactor;
     public float cohesionFactor;
     public float boundaryFudgeFactor;
+    public int bypassFrameCount;
     
 
     // Called before start
@@ -75,7 +76,8 @@ public class GameManager : MonoBehaviour
         separationFactor = 1.0f;
         alignmentFactor = 1.0f;
         cohesionFactor = 0.5f;
-        boundaryFudgeFactor = 1.0f; //2.0f;
+        boundaryFudgeFactor = 0.5f; //2.0f;
+        bypassFrameCount = 30;  // at 30 fps, 30 frames is only one second (started much too low when testing)
     }
     // Start is called before the first frame update
     void Start()

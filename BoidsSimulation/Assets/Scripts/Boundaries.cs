@@ -60,6 +60,36 @@ using UnityEngine;
  *              Figured out it is a boundary condition.  Thought I had the
  *              answer, but not quite.  Will set up individual conditions for 
  *              each of the four boundaries.
+ *              
+ *      06/05/2020
+ *          Fixed the boundary scenario.  Went back to old school.  Actually,
+ *          took the bounce out of the equation since it was working.  Instead
+ *          of looking at the boundary condition and then seeing if it was
+ *          wrap or bounce, tested to see if it was wrap or bounce first, then
+ *          tested the boundary condition.  Bounce still worked.  Then, went
+ *          old school on wrap.  Tested each case individually.  Almost.
+ *          Tested the off in x-direction too high else too low and the off
+ *          in the y-direction too high else too low.  That way, it would not
+ *          switch the boid right back to where it was.  Those conditions
+ *          need to be mutually exclusive in the same iteration (frame).
+ *          
+ *          So I think it is fixed.  Both bounce and wrap seem to work.
+ *          By the way.  I reused the fudge factor.  Instead of having it 
+ *          do a quick something at the end of the frame, I decided that I 
+ *          would use it as how many widths/heights of the object to use.
+ *          Turns out that 0.5 seems to do the trick.  It is actually rather 
+ *          funny when a whole or more of the object is used.  You cannot 
+ *          notice at 0.5 though.  Boid does not just pop back onto the screen 
+ *          seemingly in the middle of nowhere.
+ *          
+ *          Will clean up the comments later.  I would like to have the unused
+ *          code in the commits.  They are instructive to me.  What things I 
+ *          tried.  What things failed and what things worked.
+ *          
+ *          To do:
+ *              It is on to collision avoidance.  I am not exactly sure what
+ *              to do here.  It is almost the opposite of cohesion, but not
+ *              quite.  If it were, why would you need either?
  */
 public class Boundaries : MonoBehaviour
 {
@@ -68,6 +98,8 @@ public class Boundaries : MonoBehaviour
     private float objectHeight;
     bool wrap;
     float fudgeFactor;
+    int bypassFrames;
+    bool bypass;
 
     // Start is called before the first frame update
     void Start()
@@ -79,6 +111,8 @@ public class Boundaries : MonoBehaviour
         //Debug.Log("ScreenBounds: (" + Screen.width + ", " + Screen.height + ")");
         //Debug.Log("Width, Height: (" + objectWidth + ", " + objectHeight + ")");
         wrap = GameManager.instance.wrap;
+        bypassFrames = GameManager.instance.bypassFrameCount;
+        bypass = false;
     }
 
     // Update is called once per frame
@@ -96,36 +130,86 @@ public class Boundaries : MonoBehaviour
         //viewPos.y = Mathf.Clamp(viewPos.y, yMax * (-1), yMax);
         Boid boid = GetComponent<Boid>();
         Vector2 vel = boid.vel;
-        if (viewPos.x <= -xMax || xMax <= viewPos.x)
+        if (wrap)
         {
-            float xPos = viewPos.x;
-            if(viewPos.x < 0) { xPos = xPos + objectWidth; }
-            else { xPos = -objectWidth; }
+            if (viewPos.x <= -xMax)
+            {
+                viewPos.x = xMax - fudgeFactor * objectWidth;
+            }
+            else if (xMax <= viewPos.x)
+            {
+                viewPos.x = -xMax + fudgeFactor * objectWidth;
+            }
+            if (viewPos.y <= -yMax)
+            {
+                viewPos.y = yMax - fudgeFactor * objectHeight;
+            }
+            else if (yMax <= viewPos.y)
+            {
+                viewPos.y = -yMax + fudgeFactor * objectHeight;
+            }
+            /*if (!bypass)
+            {
+                bypass = true;
+                if (viewPos.x <= -xMax || xMax <= viewPos.x)
+                {
+                                float xPos = viewPos.x;
+                                if(viewPos.x < 0) { xPos = xPos + objectWidth; }
+                                else { xPos = -objectWidth; }
 
-            if(wrap) { viewPos.x = -1 * xPos; }
-            else
+                                if(wrap) { viewPos.x = -1 * xPos; }
+                    if (wrap) { viewPos.x = -1 * viewPos.x; }
+                    else
+                    {
+                        //boid.velocity.x = -1 * boid.velocity.x;
+                        vel.x = -1 * vel.x;
+                        boid.vel = vel;
+                    }
+                }
+                if (viewPos.y <= -yMax || yMax <= viewPos.y)
+                {
+                                float yPos = viewPos.y;
+                                if(viewPos.y < 0) { yPos = yPos + objectHeight; }
+                                else { yPos = yPos - objectHeight; }
+
+                                if (wrap) { viewPos.y = -1 * yPos; }
+                    if (wrap) { viewPos.y = -1 * viewPos.y; }
+                    else
+                    {
+                        //boid.velocity.y = -1 * boid.velocity.y;
+                        vel.y = -1 * vel.y;
+                        boid.vel = vel;
+                    }
+                }
+            }
+            else    // (bypass)
+            {
+                bypassFrames--;
+                if (bypassFrames <= 0)
+                {
+                    bypassFrames = GameManager.instance.bypassFrameCount;
+                    bypass = false;
+                }
+            }*/
+        }
+        else    // !wrap is bounce
+        {
+            if (viewPos.x <= -xMax || xMax <= viewPos.x)
             {
                 //boid.velocity.x = -1 * boid.velocity.x;
                 vel.x = -1 * vel.x;
                 boid.vel = vel;
             }
-        }
-        if (viewPos.y <= -yMax || yMax <= viewPos.y)
-        {
-            float yPos = viewPos.y;
-            if(viewPos.y < 0) { yPos = yPos + objectHeight; }
-            else { yPos = yPos - objectHeight; }
-
-            if (wrap) { viewPos.y = -1 * yPos; }
-            else
+            if (viewPos.y <= -yMax || yMax <= viewPos.y)
             {
                 //boid.velocity.y = -1 * boid.velocity.y;
                 vel.y = -1 * vel.y;
                 boid.vel = vel;
             }
+
         }
-        viewPos.x += fudgeFactor * vel.x * Time.deltaTime;
-        viewPos.y += fudgeFactor * vel.y * Time.deltaTime;
+        viewPos.x += /*fudgeFactor * */ vel.x * Time.deltaTime;
+        viewPos.y += /*fudgeFactor * */ vel.y * Time.deltaTime;
         transform.position = viewPos;
         //Debug.Log("viewPos.x, y : (" + viewPos.x + ", " + viewPos.y + ")");
         //Debug.Log("Bounds: " + screenBounds.x + ", " + screenBounds.y + ")");
