@@ -98,8 +98,8 @@ public class Boundaries : MonoBehaviour
     private float objectHeight;
     bool wrap;
     float fudgeFactor;
-    int bypassFrames;
-    bool bypass;
+//    int bypassFrames;
+//    bool bypass;
 
     // Start is called before the first frame update
     void Start()
@@ -111,8 +111,8 @@ public class Boundaries : MonoBehaviour
         //Debug.Log("ScreenBounds: (" + Screen.width + ", " + Screen.height + ")");
         //Debug.Log("Width, Height: (" + objectWidth + ", " + objectHeight + ")");
         wrap = GameManager.instance.wrap;
-        bypassFrames = GameManager.instance.bypassFrameCount;
-        bypass = false;
+//       bypassFrames = GameManager.instance.bypassFrameCount;
+//       bypass = false;
     }
 
     // Update is called once per frame

@@ -28,6 +28,25 @@
  *          in order to make the globals do anything, the local variables
  *          that get them must be in the Update() method.  Awake() and Start()
  *          only happen once each.  (Awake() can happen more, but not Start().)
+ *          
+ *      0/08/2020
+ *          See notes in Boid.cs.
+ *          
+ *          One interesting thing that I learned today was about scriptable
+ *          objects.  A philosophy of coding Unity projects with these new
+ *          (to me) items is seen in:
+ *          
+ *          https://unity.com/how-to/architect-game-code-scriptable-objects
+ *          
+ *          I think they would be very useful, but I am not going to use them
+ *          in this project.  Probably.
+ *          
+ *          I am thinking that I will make the project public on GitHub.  
+ *          Probably on Friday though.  I want to make a little more progress
+ *          before doing so.  But I am about done.  It is a fun project and I
+ *          have learned a lot about Unity, but I think it is about time to do
+ *          something new.  I just need to make it "complete."  Or done.
+ *          Which is a minomer.  I am not sure code is ever done.
  */
 
 using System.Collections;
@@ -42,6 +61,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
     // Put other public variables and constants here.
     public GameObject BoidPrefab;
+    public GameObject guiControls;
     public int instances = 1;   // if initialized in Awake, cannot change in Unity interface
     Vector2 screenBounds;
 
@@ -59,7 +79,8 @@ public class GameManager : MonoBehaviour
     public float cohesionFactor;
     public float boundaryFudgeFactor;
     public int bypassFrameCount;
-    
+    //    public float collisionDiameter;
+    public bool boidCollisions;
 
     // Called before start
     private void Awake()
@@ -78,6 +99,8 @@ public class GameManager : MonoBehaviour
         cohesionFactor = 0.5f;
         boundaryFudgeFactor = 0.5f; //2.0f;
         bypassFrameCount = 30;  // at 30 fps, 30 frames is only one second (started much too low when testing)
+                                //        collisionDiameter = 0.8f;
+        boidCollisions = true;
     }
     // Start is called before the first frame update
     void Start()
@@ -87,7 +110,10 @@ public class GameManager : MonoBehaviour
         float yMax = screenBounds.y;
         float xPos;
         float yPos;
-        
+
+        //Instantiate(guiControls, new Vector3(-Screen.width, -Screen.height, 0), Quaternion.identity);
+        //Instantiate(guiControls, new Vector3(0, 0, 0), Quaternion.identity);
+
         for (int i = 0; i < instances; i++)
         {
             //xPos = Random.Range(-8.0f, 8.0f);

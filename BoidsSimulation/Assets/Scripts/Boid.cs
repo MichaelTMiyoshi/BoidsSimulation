@@ -53,6 +53,27 @@
  *
  *          In the end, each of the three will produce some change to the 
  *          direction and speed of the boid.
+ *          
+ *      06/08/2020
+ *          Added collisions on Friday.  It is a capsulecollider2d so that it
+ *          is distinguished from the circle collider.  It seems to be working.
+ *          
+ *          Added layers so that I could make the boids not collide with 
+ *          each other or collide with each other.  Does not seem to quite
+ *          work.  It seems that if you turn off the collider the trigger also
+ *          turns off.  Searching out the answer for that.
+ *          
+ *          One interesting thing is that collisions now seem to be intricately
+ *          woven in with flocking.  Turn off the collisions and flocking is
+ *          essentially off.  Odd.
+ *          
+ *          Was going to finish off the last thing which is just a GUI.  The
+ *          GUI was just going to have a few toggle boxes and maybe some
+ *          sliders for adjusting the flocking parameters.  Did not get to the
+ *          flocking parameters.  And the only toggle that seems to work is
+ *          the wrap.  The boid collisions and flocking both toggle, but do not 
+ *          quite work like their Unity counterparts in the properties of 
+ *          _GameManager.
  */
 
 using System.Collections;
@@ -69,8 +90,12 @@ public class Boid : MonoBehaviour
 
     Rigidbody2D rigidbody2d;
     CircleCollider2D circlecollider2d;
+    //CapsuleCollider2D capsulecollider2d;
     // Does instantiating it here really make a difference (not in Start())
     List<GameObject> influencers = new List<GameObject>();
+    //int layer;
+    bool boidCollisions;
+    //GameObject gameObject;
 
     // Start is called before the first frame update
     void Start()
@@ -92,6 +117,11 @@ public class Boid : MonoBehaviour
         //influencers = new List<GameObject>();
         circlecollider2d = GetComponent<CircleCollider2D>();
         circlecollider2d.radius = GameManager.instance.influenceRadius;
+        //capsulecollider2d.size.x = capsulecollider2d.bounds.extents.y = GameManager.instance.collisionDiameter;
+        boidCollisions = GameManager.instance.boidCollisions;
+        //gameObject = GetComponent<GameObject>();
+        this.gameObject.layer = LayerMask.NameToLayer("BoidCollisions");
+        
     }
 
     // Update is called once per frame
@@ -99,6 +129,7 @@ public class Boid : MonoBehaviour
     {
         position = rigidbody2d.position;
         circlecollider2d.radius = GameManager.instance.influenceRadius;
+        boidCollisions = GameManager.instance.boidCollisions;
         // Calculate position and velocity first without any influence of the
         // flock.  Then, modify the velocity to take into account the flock
         // influences.  Check to see that flocking is enabled.
@@ -112,6 +143,15 @@ public class Boid : MonoBehaviour
         float currentSpeed = speed;
         Vector2 direction = GetDirection();
         Vector2 directionWeighted = vel;
+        if (boidCollisions)
+        {
+            this.gameObject.layer = LayerMask.NameToLayer("BoidCollisions");
+        }
+        else
+        {
+            this.gameObject.layer = LayerMask.NameToLayer("NoBoidCollisions");
+        }
+        Debug.Log("Layer: " + this.gameObject.layer);
         if (GameManager.instance.flocking)
         {
             Vector2 averagePosition = new Vector2(0.0f, 0.0f);
