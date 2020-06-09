@@ -10,6 +10,8 @@ see [Boids](https://en.wikipedia.org/wiki/Boids) for explanation of what boids a
 
 There is a release of the Boids Simulation for OSX (v1.0).  [Releases](https://github.com/MichaelTMiyoshi/BoidsSimulation/releases)
 
+Note to self on releases: When building the release, do not put it in the same folder as the repo.  Do an actual release.  Putting it in the repo folder does some unnecessary uploading of the project.  (See the folder called Releases deeper in the repo as opposed to the one pointed to by the Releases link.  You will see some interesting but unnecessary files and folders there.)
+
 ### Goals:
 * Successful use of GitHub and Unity (learned a lot about Git, GitHub, and Unity)
 * Successful Boids simulation (nuances not done, but the simulation is somewhat reasonable)
