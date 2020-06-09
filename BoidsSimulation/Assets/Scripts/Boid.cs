@@ -95,7 +95,7 @@ public class Boid : MonoBehaviour
     List<GameObject> influencers = new List<GameObject>();
     //int layer;
     bool boidCollisions;
-    //GameObject gameObject;
+    bool flocking;
 
     // Start is called before the first frame update
     void Start()
@@ -119,6 +119,7 @@ public class Boid : MonoBehaviour
         circlecollider2d.radius = GameManager.instance.influenceRadius;
         //capsulecollider2d.size.x = capsulecollider2d.bounds.extents.y = GameManager.instance.collisionDiameter;
         boidCollisions = GameManager.instance.boidCollisions;
+        flocking = GameManager.instance.flocking;
         //gameObject = GetComponent<GameObject>();
         this.gameObject.layer = LayerMask.NameToLayer("BoidCollisions");
         
@@ -130,6 +131,7 @@ public class Boid : MonoBehaviour
         position = rigidbody2d.position;
         circlecollider2d.radius = GameManager.instance.influenceRadius;
         boidCollisions = GameManager.instance.boidCollisions;
+        flocking = GameManager.instance.flocking;
         // Calculate position and velocity first without any influence of the
         // flock.  Then, modify the velocity to take into account the flock
         // influences.  Check to see that flocking is enabled.
@@ -151,8 +153,8 @@ public class Boid : MonoBehaviour
         {
             this.gameObject.layer = LayerMask.NameToLayer("NoBoidCollisions");
         }
-        Debug.Log("Layer: " + this.gameObject.layer);
-        if (GameManager.instance.flocking)
+        //Debug.Log("Layer: " + this.gameObject.layer);
+        if (flocking)
         {
             Vector2 averagePosition = new Vector2(0.0f, 0.0f);
             if (influencers.Count != 0)

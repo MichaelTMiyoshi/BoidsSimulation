@@ -29,7 +29,7 @@
  *          that get them must be in the Update() method.  Awake() and Start()
  *          only happen once each.  (Awake() can happen more, but not Start().)
  *          
- *      0/08/2020
+ *      06/08/2020
  *          See notes in Boid.cs.
  *          
  *          One interesting thing that I learned today was about scriptable
@@ -47,6 +47,45 @@
  *          have learned a lot about Unity, but I think it is about time to do
  *          something new.  I just need to make it "complete."  Or done.
  *          Which is a minomer.  I am not sure code is ever done.
+ *          
+ *      06/09/2020
+ *          Made a mistake yesterday that cost a couple hours or so of
+ *          debugging.  Forgot to attach the toggle scripts to their
+ *          respective toggle switches.  Just needed to drag the scripts to 
+ *          the assets in the canvas prefab.  Simple.  Ah well.  Learning
+ *          experience.  I tried to figure out the difference in wrapping
+ *          (which worked) and the other two toggles (which did not work).  The
+ *          simple answer was that they were not the same.  The code was not
+ *          included in the toggles.  Ah well.  Quick fix today.
+ *          
+ *          Got the toggles and slider to work.  Mostly.  I could not get the
+ *          slider to not be interactable when the flocking was on, but the 
+ *          influence was off.  When flocking is off, the slider is not
+ *          interactable, but when flocking is on and influence is off, the
+ *          slider is still interactable.  I probably need to look at the 
+ *          truth table better, but I am not going to do that.
+ *          
+ *          I never did fix it so that I could make a different amount of
+ *          boids for the simulation.  You can obviously do that with the
+ *          Unity project, but not with the full build.  I am going to try to 
+ *          do a release on GitHub.  I looked up how to do it.  I am just not
+ *          quite sure how it will turn out.
+ *          
+ *          Overall, I am pleased with the project.  It is something I did 
+ *          with a little success when I was trying to demonstrate Windows
+ *          programming to my students many years ago.  This is a much better
+ *          demonstration even though it is not quite what I thought it would
+ *          be.  The boids do not flock quite the way that I was hoping.
+ *          
+ *          If I was going to continue the project, I would add a way to make
+ *          obstacles.  I would also see if I could get the boids to flock 
+ *          better.
+ *          
+ *          The last thing I want to point out is the strange edge case.  The
+ *          boundary offers a strange gathering of boids.  I am not sure what
+ *          it is.  I do not think they exert influence across the wrap 
+ *          boundary.  Still, they congregate at the edges and corners when 
+ *          allowed to run for a while.
  */
 
 using System.Collections;
@@ -62,7 +101,7 @@ public class GameManager : MonoBehaviour
     // Put other public variables and constants here.
     public GameObject BoidPrefab;
     public GameObject guiControls;
-    public int instances = 1;   // if initialized in Awake, cannot change in Unity interface
+    public int instances = 50;   // if initialized in Awake, cannot change in Unity interface
     Vector2 screenBounds;
 
     // screen wrap (show up on the other side) or bounce
@@ -78,7 +117,7 @@ public class GameManager : MonoBehaviour
     public float alignmentFactor;
     public float cohesionFactor;
     public float boundaryFudgeFactor;
-    public int bypassFrameCount;
+    //public int bypassFrameCount;
     //    public float collisionDiameter;
     public bool boidCollisions;
 
@@ -98,7 +137,7 @@ public class GameManager : MonoBehaviour
         alignmentFactor = 1.0f;
         cohesionFactor = 0.5f;
         boundaryFudgeFactor = 0.5f; //2.0f;
-        bypassFrameCount = 30;  // at 30 fps, 30 frames is only one second (started much too low when testing)
+        //bypassFrameCount = 30;  // at 30 fps, 30 frames is only one second (started much too low when testing)
                                 //        collisionDiameter = 0.8f;
         boidCollisions = true;
     }

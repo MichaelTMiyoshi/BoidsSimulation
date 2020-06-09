@@ -372,18 +372,18 @@ MonoBehaviour:
     type: 3}
   guiControls: {fileID: 0}
   instances: 50
-  wrap: 0
+  wrap: 1
   flocking: 1
-  separation: 0
-  alignment: 0
-  cohesion: 0
+  separation: 1
+  alignment: 1
+  cohesion: 1
   influenceRadius: 0.5
   separationFactor: 0
   alignmentFactor: 0
   cohesionFactor: 0
   boundaryFudgeFactor: 0
   bypassFrameCount: 0
-  boidCollisions: 0
+  boidCollisions: 1
 --- !u!4 &1669108133
 Transform:
   m_ObjectHideFlags: 0
@@ -405,10 +405,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 94665533723797226, guid: 9d971ea94411e4ed386ee1e777497daa,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1588294200920793564, guid: 9d971ea94411e4ed386ee1e777497daa,
         type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 1800567497272195817, guid: 9d971ea94411e4ed386ee1e777497daa,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7935457535036981648, guid: 9d971ea94411e4ed386ee1e777497daa,
         type: 3}
