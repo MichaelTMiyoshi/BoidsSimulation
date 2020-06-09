@@ -86,6 +86,28 @@
  *          it is.  I do not think they exert influence across the wrap 
  *          boundary.  Still, they congregate at the edges and corners when 
  *          allowed to run for a while.
+ *          
+ *          Final note (at least for now):
+ *              I got rid of a bunch of commented code.  I normally would not
+ *              have done this, but since I have started to understand and
+ *              use Git and GitHub for version control, I do not worry about
+ *              keep other versions of code.  They are already being stored
+ *              as long as I commit my changes when I have good versions of
+ *              code.  I know that getting rid of those commented sections
+ *              does not do anything to the code, but there is some sort of
+ *              catharsis doing it.  Especially, since I have not done it 
+ *              before.  I have always kept those useless lines of code as a 
+ *              history.  Now, I do not worry about keeping that history in
+ *              the commented sections.  I keep them in my version control.
+ *              
+ *          P.S.:
+ *              Okay.  One other note.  As much as I have not liked being away
+ *              from school during the COVID-19 pandemic, I have learned a lot
+ *              of programming during that time.  I normally do not get to 
+ *              spend all these hours coding or modeling like my students get
+ *              to do.  It makes me appreciate the time the students spend to
+ *              get better at their craft.  Coding is creative and technical.
+ *              So it takes a lot of time on the computer to get good at it.
  */
 
 using System.Collections;
@@ -117,8 +139,6 @@ public class GameManager : MonoBehaviour
     public float alignmentFactor;
     public float cohesionFactor;
     public float boundaryFudgeFactor;
-    //public int bypassFrameCount;
-    //    public float collisionDiameter;
     public bool boidCollisions;
 
     // Called before start
@@ -137,8 +157,6 @@ public class GameManager : MonoBehaviour
         alignmentFactor = 1.0f;
         cohesionFactor = 0.5f;
         boundaryFudgeFactor = 0.5f; //2.0f;
-        //bypassFrameCount = 30;  // at 30 fps, 30 frames is only one second (started much too low when testing)
-                                //        collisionDiameter = 0.8f;
         boidCollisions = true;
     }
     // Start is called before the first frame update
@@ -150,22 +168,11 @@ public class GameManager : MonoBehaviour
         float xPos;
         float yPos;
 
-        //Instantiate(guiControls, new Vector3(-Screen.width, -Screen.height, 0), Quaternion.identity);
-        //Instantiate(guiControls, new Vector3(0, 0, 0), Quaternion.identity);
-
         for (int i = 0; i < instances; i++)
         {
-            //xPos = Random.Range(-8.0f, 8.0f);
-            //yPos = Random.Range(-4.0f, 4.0f);
             xPos = Random.Range(-xMax, xMax);
             yPos = Random.Range(-yMax, yMax);
             Instantiate(BoidPrefab, new Vector3(xPos, yPos, 0), Quaternion.identity);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

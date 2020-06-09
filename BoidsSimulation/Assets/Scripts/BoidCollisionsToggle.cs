@@ -7,11 +7,6 @@ public class BoidCollisionsToggle : MonoBehaviour
 {
     private bool boidCollisions;
     Toggle boidCollisionsToggle;
-    // Start is called before the first frame update
-    //void OnGUI()
-    //{
-    //wrap = GUI.Toggle(new Rect(25, 25, 100, 30), wrap, "WrapToggle");   // 160 x 20; -370, 220
-    //}
 
     void Start()
     {

@@ -98,21 +98,14 @@ public class Boundaries : MonoBehaviour
     private float objectHeight;
     bool wrap;
     float fudgeFactor;
-//    int bypassFrames;
-//    bool bypass;
 
     // Start is called before the first frame update
     void Start()
     {
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
-        //screenBounds = Camera.main.WorldToScreenPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
         objectWidth = transform.GetComponent<SpriteRenderer>().bounds.size.x / 2;
         objectHeight = transform.GetComponent<SpriteRenderer>().bounds.size.y / 2;
-        //Debug.Log("ScreenBounds: (" + Screen.width + ", " + Screen.height + ")");
-        //Debug.Log("Width, Height: (" + objectWidth + ", " + objectHeight + ")");
         wrap = GameManager.instance.wrap;
-//       bypassFrames = GameManager.instance.bypassFrameCount;
-//       bypass = false;
     }
 
     // Update is called once per frame
@@ -121,13 +114,8 @@ public class Boundaries : MonoBehaviour
         wrap = GameManager.instance.wrap;
         fudgeFactor = GameManager.instance.boundaryFudgeFactor;
         Vector3 viewPos = transform.position;
-        //Vector3 viewPos = GetComponent<Rigidbody2D>().position;
-        //viewPos.x = Mathf.Clamp(viewPos.x, screenBounds.x * (-1) + objectWidth, screenBounds.x - objectWidth);
-        //viewPos.y = Mathf.Clamp(viewPos.y, screenBounds.y * (-1) + objectHeight, screenBounds.y - objectHeight);
         float xMax = screenBounds.x;
         float yMax = screenBounds.y;
-        //viewPos.x = Mathf.Clamp(viewPos.x, xMax * (-1), xMax);
-        //viewPos.y = Mathf.Clamp(viewPos.y, yMax * (-1), yMax);
         Boid boid = GetComponent<Boid>();
         Vector2 vel = boid.vel;
         if (wrap)
@@ -148,71 +136,23 @@ public class Boundaries : MonoBehaviour
             {
                 viewPos.y = -yMax + fudgeFactor * objectHeight;
             }
-            /*if (!bypass)
-            {
-                bypass = true;
-                if (viewPos.x <= -xMax || xMax <= viewPos.x)
-                {
-                                float xPos = viewPos.x;
-                                if(viewPos.x < 0) { xPos = xPos + objectWidth; }
-                                else { xPos = -objectWidth; }
-
-                                if(wrap) { viewPos.x = -1 * xPos; }
-                    if (wrap) { viewPos.x = -1 * viewPos.x; }
-                    else
-                    {
-                        //boid.velocity.x = -1 * boid.velocity.x;
-                        vel.x = -1 * vel.x;
-                        boid.vel = vel;
-                    }
-                }
-                if (viewPos.y <= -yMax || yMax <= viewPos.y)
-                {
-                                float yPos = viewPos.y;
-                                if(viewPos.y < 0) { yPos = yPos + objectHeight; }
-                                else { yPos = yPos - objectHeight; }
-
-                                if (wrap) { viewPos.y = -1 * yPos; }
-                    if (wrap) { viewPos.y = -1 * viewPos.y; }
-                    else
-                    {
-                        //boid.velocity.y = -1 * boid.velocity.y;
-                        vel.y = -1 * vel.y;
-                        boid.vel = vel;
-                    }
-                }
-            }
-            else    // (bypass)
-            {
-                bypassFrames--;
-                if (bypassFrames <= 0)
-                {
-                    bypassFrames = GameManager.instance.bypassFrameCount;
-                    bypass = false;
-                }
-            }*/
         }
         else    // !wrap is bounce
         {
             if (viewPos.x <= -xMax || xMax <= viewPos.x)
             {
-                //boid.velocity.x = -1 * boid.velocity.x;
                 vel.x = -1 * vel.x;
                 boid.vel = vel;
             }
             if (viewPos.y <= -yMax || yMax <= viewPos.y)
             {
-                //boid.velocity.y = -1 * boid.velocity.y;
                 vel.y = -1 * vel.y;
                 boid.vel = vel;
             }
 
         }
-        viewPos.x += /*fudgeFactor * */ vel.x * Time.deltaTime;
-        viewPos.y += /*fudgeFactor * */ vel.y * Time.deltaTime;
+        viewPos.x += vel.x * Time.deltaTime;
+        viewPos.y += vel.y * Time.deltaTime;
         transform.position = viewPos;
-        //Debug.Log("viewPos.x, y : (" + viewPos.x + ", " + viewPos.y + ")");
-        //Debug.Log("Bounds: " + screenBounds.x + ", " + screenBounds.y + ")");
-        //Debug.Log("BoidVel: " + boid.velocity.x + ", " + boid.velocity.y + ")");
     }
 }

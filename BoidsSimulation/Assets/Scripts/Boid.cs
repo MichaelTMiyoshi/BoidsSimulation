@@ -90,10 +90,8 @@ public class Boid : MonoBehaviour
 
     Rigidbody2D rigidbody2d;
     CircleCollider2D circlecollider2d;
-    //CapsuleCollider2D capsulecollider2d;
     // Does instantiating it here really make a difference (not in Start())
     List<GameObject> influencers = new List<GameObject>();
-    //int layer;
     bool boidCollisions;
     bool flocking;
 
@@ -102,8 +100,6 @@ public class Boid : MonoBehaviour
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
         position = new Vector2(3.0f, 3.0f);
-        //velocity = new Vector2(3.0f, 0.0f);
-        //velocity = new Vector2(3.0f / Mathf.Sqrt(2.0f), -(3.0f / Mathf.Sqrt(2.0f)));
         float x= 0.0f, y = 0.0f;
         while (x == 0.0f && y == 0.0f)
         {
@@ -112,15 +108,11 @@ public class Boid : MonoBehaviour
         }
         velocity = new Vector2(x, y);
         velocity.Normalize();
-        //velocity *= 3.0f;
         velocity *= Random.Range(0.0f, 5.0f);   // give the speed a randomness too
-        //influencers = new List<GameObject>();
         circlecollider2d = GetComponent<CircleCollider2D>();
         circlecollider2d.radius = GameManager.instance.influenceRadius;
-        //capsulecollider2d.size.x = capsulecollider2d.bounds.extents.y = GameManager.instance.collisionDiameter;
         boidCollisions = GameManager.instance.boidCollisions;
         flocking = GameManager.instance.flocking;
-        //gameObject = GetComponent<GameObject>();
         this.gameObject.layer = LayerMask.NameToLayer("BoidCollisions");
         
     }
@@ -139,8 +131,6 @@ public class Boid : MonoBehaviour
         float separationFactor = GameManager.instance.separationFactor;
         float alignmentFactor = GameManager.instance.alignmentFactor;
         float cohesionFactor = GameManager.instance.cohesionFactor;
-        //Vector2 velocityDifference;     // alignment
-        //Vector2 separationDifference;   // separation
         Vector2 velocityChange = new Vector2(0.0f, 0.0f);
         float currentSpeed = speed;
         Vector2 direction = GetDirection();
@@ -153,13 +143,11 @@ public class Boid : MonoBehaviour
         {
             this.gameObject.layer = LayerMask.NameToLayer("NoBoidCollisions");
         }
-        //Debug.Log("Layer: " + this.gameObject.layer);
         if (flocking)
         {
             Vector2 averagePosition = new Vector2(0.0f, 0.0f);
             if (influencers.Count != 0)
             {
-                //Debug.Log(influencers);
                 for (int i = 0; i < influencers.Count; i++)
                 {
                     if (GameManager.instance.cohesion)
@@ -171,7 +159,6 @@ public class Boid : MonoBehaviour
                     if (GameManager.instance.alignment)
                     {
                         directionWeighted += influencers[i].GetComponent<Boid>().vel;   // weights speed
-                        //direction += influencers[i].GetComponent<Boid>().GetDirection();    // does not give any weight to speed
                     }
 
                 }
@@ -180,19 +167,14 @@ public class Boid : MonoBehaviour
                     directionWeighted /= (influencers.Count + 1);
                     directionWeighted.Normalize();
                     velocity = directionWeighted * currentSpeed;
-                    //direction /= (influencers.Count + 1);
-                    //direction.Normalize();
-                    //velocity = direction * currentSpeed;
                 }
             }
-            //else { Debug.Log("Influencers empty"); }
             if (averagePosition != new Vector2(0.0f, 0.0f)  && GameManager.instance.cohesion)
             {
                 positionDifference =  averagePosition- position;    // direction of speed change to get cohesion
 
                 positionDifference.Normalize();
                 Vector2 positionDifferenceInfluence = positionDifference * cohesionFactor;
-                //Debug.Log("PosDiff: " + positionDifferenceInfluence);
                 velocityChange = velocity + positionDifferenceInfluence;
             }
             velocity += velocityChange;
@@ -230,7 +212,6 @@ public class Boid : MonoBehaviour
                 degrees = 90.0f;
             }
         }
-        //Debug.Log("Position: (" + position.x + ", " + position.y + ")");  // forgot to add Rigidbody2D to PreFab
         rigidbody2d.MovePosition(position);
         rigidbody2d.MoveRotation(degrees);
     }
@@ -245,12 +226,10 @@ public class Boid : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision != null && !influencers.Contains(collision.gameObject)) { influencers.Add(collision.gameObject); }
-        //if (influencers.Count != 0) { Debug.Log("influencer size (added): " + influencers.Count); }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision != null && influencers.Contains(collision.gameObject)) { influencers.Remove(collision.gameObject); }
-        //if (influencers.Count != 0) { Debug.Log("influencer size (remove): " + influencers.Count); }
     }
 }
