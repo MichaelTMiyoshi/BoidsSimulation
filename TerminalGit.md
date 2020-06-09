@@ -57,6 +57,17 @@ Using terminal:
 
 After you do some updates and so forth, you can use the process above for pushing updates.  Just push to the branch instead of master.  (git push origin `branchname`)
 
+### Merging a Branch
+
+I did my first merge of the flocking branch back into the master branch.  Followed this [merge how to](https://stackabuse.com/git-merge-branch-into-master/) to get it done.
+
+Using terminal:
+1. git checkout master (goes to the master branch)
+1. git merge `branchname` (merges the branch back into master)
+1. git push origin master
+
+You might need to pull your master if your push does not work.  I had to do that.  But you just pull from the remote and then push.
+
 ## Other Thoughts
 
 Note: I have not yet done a merge back to the master.  I think that will come later and I will document that here as well.
