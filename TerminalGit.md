@@ -12,7 +12,7 @@ Here is what I came up with in terms of process.
    1. git init
    1. git remote add origin `https://github.com/UserName/repo.git` (https) or
    1. ~~git remote add origin `git@github.com:UserName/repo.git` (SSH)~~  (You can use it, but I wanted to avoid confusion.  Note: You can only use one or the other, https or SSH.)
-   1. git pull repo.git (use the full url including https://)
+   1. git pull `https://github.com/UserName/repo.git` (use the full url including https://)
 1. Create the Unity project in your repo folder.  This will create a new folder instead of making the project right at the front of your repo.
 1. Using Terminal:
    1. git status (to see what files need to be included in the commit)
