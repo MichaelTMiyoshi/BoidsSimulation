@@ -1,6 +1,6 @@
-# Using Git from the Terminal in MacOS
+# Using Git from the Terminal (in MacOS)
 
-It seems that using Terminal and the command line Git is the way to go when making Unity projects with a GitHub repo.  I made the folder for the repo, then followed instructions on how to make a [local Git repo](https://guides.codepath.com/ios/Using-Git-with-Terminal).  Then, I followed [pull instructions](https://www.atlassian.com/git/tutorials/syncing/git-pull) to get the repository I had already made down to the local machine.  Then, I made the project.  Just an empty project at first.  Then, I pushed the project.  I followed the [local Git repo](https://guides.codepath.com/ios/Using-Git-with-Terminal) instructions when I pushed the project.
+It seems that using Terminal and the command line Git is the way to go when making Unity projects with a GitHub repo.  (It is the same on Mac and PC and Linux, but they use different tools.)  I made the folder for the repo, then followed instructions on how to make a [local Git repo](https://guides.codepath.com/ios/Using-Git-with-Terminal).  Then, I followed [pull instructions](https://www.atlassian.com/git/tutorials/syncing/git-pull) to get the repository I had already made down to the local machine.  Then, I made the project.  Just an empty project at first.  Then, I pushed the project.  I followed the [local Git repo](https://guides.codepath.com/ios/Using-Git-with-Terminal) instructions when I pushed the project.
 
 ## Creating Unity Project Repo
 
